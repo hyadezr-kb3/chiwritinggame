@@ -1,0 +1,390 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    body {background-color: #ecedf1}
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px 'PingFang TC'; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px 'PingFang TC'; -webkit-text-stroke: #000000; min-height: 17.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html lang="zh-Hant"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;title&gt;中文寫作小冒險&lt;/title&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script src="https://unpkg.com/react@18/umd/react.production.min.js"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script src="https://unpkg.com/@babel/standalone/babel.min.js"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;display=swap" rel="stylesheet"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;style&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>body { font-family: 'Noto Sans TC', sans-serif; background-color: #F3F4F6; }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div id="root"&gt;&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script type="text/babel"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const { useState, useEffect } = React;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function App() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [apiKey, setApiKey] = useState(localStorage.getItem('gemini_api_key') || '');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [showSettings, setShowSettings] = useState(!localStorage.getItem('gemini_api_key'));</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">      </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [gameState, setGameState] = useState('setup');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [turn, setTurn] = useState(1);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [loading, setLoading] = useState(false);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [topicType, setTopicType] = useState('旅行');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [location, setLocation] = useState('');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [characters, setCharacters] = useState('');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [goal, setGoal] = useState('');</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [history, setHistory] = useState([]);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [feedback, setFeedback] = useState('歡迎來到寫作冒險！準備好和我一起創作專屬的故事了嗎？');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [currentStory, setCurrentStory] = useState('');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [challenge, setChallenge] = useState(null);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [userInput, setUserInput] = useState('');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const [usedWords, setUsedWords] = useState([]);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const saveApiKey = (key) =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setApiKey(key);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>localStorage.setItem('gemini_api_key', key);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setShowSettings(false);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// 呼叫 Gemini API 的核心函數</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const callGeminiAI = async (userPrompt, systemPrompt) =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>method: 'POST',</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>headers: { 'Content-Type': 'application/json' },</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>body: JSON.stringify({</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>contents: [</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>{ role: 'user', parts: [{ text: systemPrompt + "\n\n" + userPrompt }] }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>],</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>generationConfig: { responseMimeType: "application/json" }</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>})</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>});</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const data = await res.json();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (data.error) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>throw new Error(data.error.message);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>let rawText = data.candidates[0].content.parts[0].text;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// 清洗可能存在的 markdown code blocks</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>return JSON.parse(rawText);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const handleStart = async () =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (!apiKey) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>alert('請先設定 Gemini API Key！');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>setShowSettings(true);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (!location || !characters || !goal) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>alert('請填寫完整的故事背景資訊喔！');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setLoading(true);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>try {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>const systemPrompt = `</span></p>
+<p class="p1"><span class="s1">你是一位專為國小生設計的中文寫作遊戲引導員，同時扮演「故事說書人」與「溫柔的語文教練（精靈角色）」。</span></p>
+<p class="p1"><span class="s1">【核心原則】</span></p>
+<p class="p1"><span class="s1">1. 全程必須使用規範的「中文書面語」，絕對不能出現任何粵語方言字詞（如：嘅、佢、咁、睇、咗等）。</span></p>
+<p class="p1"><span class="s1">2. 語氣生動親切，以鼓勵為主。</span></p>
+<p class="p1"><span class="s1">【故事背景設定】</span></p>
+<p class="p1"><span class="s1">- 主題類型：${topicType}</span></p>
+<p class="p1"><span class="s1">- 故事地點：${location}</span></p>
+<p class="p1"><span class="s1">- 登場人物：${characters}</span></p>
+<p class="p1"><span class="s1">- 主要目標：${goal}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">請嚴格輸出 JSON 格式：</span></p>
+<p class="p1"><span class="s1">{</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"language_feedback": "歡迎語與鼓勵",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"story_continuation": "故事的開頭段落（80-150字）",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"next_challenge": {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>"situation": "情境說明",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>"task": "寫作任務指令",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>"prompt_words": ["詞彙1", "詞彙2", "連接詞"]</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">`;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>const userPrompt = "玩家剛剛做好了故事背景設定。請撰寫故事的開頭段落（story_continuation），並給予第 1 回合的寫作任務（next_challenge）。";</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">          </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>const data = await callGeminiAI(userPrompt, systemPrompt);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>setCurrentStory(data.story_continuation);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>setChallenge(data.next_challenge);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>setFeedback(data.language_feedback);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>setGameState('playing');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>} catch (err) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>alert('生成失敗：' + err.message);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setLoading(false);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const handleSubmitTurn = async () =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (!userInput.trim()) return;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setLoading(true);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const newHistory = [...history, { turn, input: userInput, story: currentStory }];</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setHistory(newHistory);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (challenge &amp;&amp; challenge.prompt_words) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>challenge.prompt_words.forEach(word =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (userInput.includes(word) &amp;&amp; !usedWords.includes(word)) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>setUsedWords(prev =&gt; [...prev, word]);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>});</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>try {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>const systemPrompt = `</span></p>
+<p class="p1"><span class="s1">你是一位專為國小生設計的中文寫作遊戲引導員，同時扮演「故事說書人」與溫柔的語文教練。</span></p>
+<p class="p1"><span class="s1">【核心原則】全規範中文書面語，絕不使用粵語。</span></p>
+<p class="p1"><span class="s1">【背景】主題:${topicType} | 地點:${location} | 人物:${characters} | 目標:${goal} | 當前第${turn}回合。</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">請嚴格輸出 JSON 格式：</span></p>
+<p class="p1"><span class="s1">{</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"language_feedback": "精靈語文點評（讚賞優點或溫柔指導語病）",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"story_continuation": "將玩家句子順暢融入後推進的故事段落（80-150字）",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>"next_challenge": {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>"situation": "下一個情境",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>"task": "具體寫作任務",</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>"prompt_words": ["詞彙1", "詞彙2", "連接詞"]</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">`;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>const userPrompt = `當前為第 ${turn} 回合。玩家輸入的句子是：「${userInput}」。請分析並推進故事。`;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>const data = await callGeminiAI(userPrompt, systemPrompt);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>setCurrentStory(data.story_continuation);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>setFeedback(data.language_feedback);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>if (turn &gt;= 5) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>setGameState('ending');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>setChallenge(data.next_challenge);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>setTurn(turn + 1);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>setUserInput('');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>} catch (err) {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>alert('提交失敗：' + err.message);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setLoading(false);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const handleChipClick = (word) =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setUserInput(prev =&gt; prev ? `${prev} ${word}` : word);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>};</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>return (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div className="max-w-3xl mx-auto p-4 min-h-screen flex flex-col justify-between"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;header className="text-center py-4 border-b border-gray-200 mb-4 relative"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;h1 className="text-2xl font-bold text-indigo-600"&gt;✍️ 中文寫作小冒險&lt;/h1&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;p className="text-sm text-gray-500"&gt;專屬你的互動式故事創作集&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>onClick={() =&gt; setShowSettings(!showSettings)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>className="absolute right-0 top-4 text-xs bg-gray-200 px-3 py-1 rounded-lg text-gray-700 hover:bg-gray-300"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>⚙️ 設定 API Key</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/header&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>{/* API Key 設定彈窗 */}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>{showSettings &amp;&amp; (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl mb-4 space-y-2"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;h3 className="font-bold text-amber-900 text-sm"&gt;設定 Google Gemini API Key&lt;/h3&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;p className="text-xs text-amber-700"&gt;為了讓網頁能直接與 AI 溝通，請輸入你的 Gemini API Key（只需設定一次，會安全保存在你的瀏覽器中）：&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="flex gap-2"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;input</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>type="password"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>placeholder="貼上你的 API Key (AIzaSy...)"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>defaultValue={apiKey}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>id="apiKeyInput"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>className="flex-1 p-2 border border-amber-300 rounded-xl text-sm bg-white"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;button</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>onClick={() =&gt; saveApiKey(document.getElementById('apiKeyInput').value.trim())}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>className="px-4 py-2 bg-amber-600 text-white text-sm font-bold rounded-xl hover:bg-amber-700"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>儲存</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>)}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>{gameState === 'setup' &amp;&amp; (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;h2 className="text-xl font-bold text-gray-800"&gt;第一步：設定你的故事背景&lt;/h2&gt;</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">              </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;label className="block font-medium text-gray-700 mb-1"&gt;1. 選擇寫作主題：&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="flex gap-2"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>{['冒險', '旅行', '夢境'].map(t =&gt; (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;button</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                      </span>key={t}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                      </span>onClick={() =&gt; setTopicType(t)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                      </span>className={`px-4 py-2 rounded-xl text-sm font-medium border ${topicType === t ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-gray-50 text-gray-600'}`}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                      </span>{t === '冒險' ? '🗺️ 一場冒險' : t === '旅行' ? '✈️ 一次旅行' : '🌙 一個夢'}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>))}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;label className="block font-medium text-gray-700 mb-1"&gt;2. 故事發生在哪裡？&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;input</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>type="text"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>placeholder="例如：日本主題樂園、神祕的森林、阿嬤家"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>value={location}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>onChange={e =&gt; setLocation(e.target.value)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>className="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;label className="block font-medium text-gray-700 mb-1"&gt;3. 有誰一起參與？&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;input</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>type="text"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>placeholder="例如：我和爸爸、還有一個膽小的朋友"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>value={characters}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>onChange={e =&gt; setCharacters(e.target.value)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>className="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;label className="block font-medium text-gray-700 mb-1"&gt;4. 最想完成的一件事是什麼？&lt;/label&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;input</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>type="text"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>placeholder="例如：買到限量版玩具、解開古老謎題"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>value={goal}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>onChange={e =&gt; setGoal(e.target.value)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>className="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>/&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;button</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>onClick={handleStart}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>disabled={loading}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>className="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-md hover:bg-indigo-700 transition"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>{loading ? '精靈正在準備故事...' : '開啟寫作之旅 🚀'}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>)}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>{gameState === 'playing' &amp;&amp; (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="space-y-4 flex-1 flex flex-col justify-between"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl flex items-start gap-3"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;span className="text-2xl"&gt;🧚‍♂️&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;h3 className="font-bold text-amber-800 text-sm"&gt;寫作精靈的回饋：&lt;/h3&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;p className="text-amber-900 text-sm mt-1"&gt;{feedback}&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-3"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="flex justify-between text-xs text-gray-400 border-b pb-2"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;span&gt;寫作主題：{topicType}&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;span&gt;回合：{turn} / 5&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;p className="text-gray-800 leading-relaxed text-base"&gt;{currentStory}&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>{challenge &amp;&amp; (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="bg-indigo-50 border border-indigo-100 p-5 rounded-2xl space-y-3"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;div className="text-sm font-bold text-indigo-900"&gt;🎯 當前任務：{challenge.situation}&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;p className="text-sm text-indigo-700"&gt;{challenge.task}&lt;/p&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;div className="flex flex-wrap gap-2 items-center pt-1"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;span className="text-xs text-indigo-500 font-medium"&gt;靈感詞庫（點擊使用）：&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>{challenge.prompt_words?.map((word, idx) =&gt; (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;button</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>key={idx}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>onClick={() =&gt; handleChipClick(word)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>className="px-3 py-1 bg-white border border-indigo-200 text-indigo-700 text-xs rounded-full hover:bg-indigo-100 transition shadow-sm"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                      </span>&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>+ {word}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>))}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;textarea</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>rows="3"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>placeholder="在這裡輸入你的句子，練習寫規範的中文書面語..."</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>value={userInput}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>onChange={e =&gt; setUserInput(e.target.value)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>className="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&gt;&lt;/textarea&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;button</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>onClick={handleSubmitTurn}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>disabled={loading || !userInput.trim()}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>className="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>{loading ? '精靈正在閱讀中...' : turn === 5 ? '完成故事並匯出小書 📖' : '送出句子，繼續冒險 ✨'}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>)}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>{gameState === 'ending' &amp;&amp; (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-6 text-center"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="text-4xl"&gt;🎉&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;h2 className="text-2xl font-bold text-gray-800"&gt;恭喜完成你的專屬小書！&lt;/h2&gt;</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">              </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="text-left bg-amber-50/50 p-6 rounded-2xl border border-amber-100 space-y-4"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h3 className="text-lg font-bold text-amber-900 text-center"&gt;《{location}的{topicType}記》&lt;/h3&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>{history.map((item, idx) =&gt; (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;div key={idx} className="space-y-1 text-sm text-gray-700"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p className="italic text-gray-500"&gt;＞ {item.input}&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;p className="leading-relaxed"&gt;{item.story}&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>))}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;div className="bg-indigo-50 p-4 rounded-xl text-left space-y-2"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h4 className="font-bold text-indigo-900 text-sm"&gt;🏆 本次冒險解鎖的好詞庫：&lt;/h4&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div className="flex flex-wrap gap-2"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>{usedWords.length &gt; 0 ? (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>usedWords.map((w, i) =&gt; (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                      </span>&lt;span key={i} className="px-3 py-1 bg-white text-indigo-700 text-xs rounded-full border border-indigo-200"&gt;{w}&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>))</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>) : (</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;span className="text-xs text-gray-500"&gt;繼續加油，下次試著多使用靈感標籤喔！&lt;/span&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                  </span>)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;button</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>onClick={() =&gt; window.location.reload()}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>className="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-md hover:bg-indigo-700 transition"</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>再玩一次，創作新故事 🔄</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">              </span>&lt;/button&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>)}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>ReactDOM.createRoot(document.getElementById('root')).render(&lt;App /&gt;);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+</body>
+</html>
